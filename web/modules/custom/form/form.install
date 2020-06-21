@@ -1,0 +1,83 @@
+<?php
+use Drupal\Core\Database\Database;
+
+function form_schema() {
+	$schema['employee'] = array(
+		'description' => 'Stores value in custom table',
+		'fields' => array(
+			'pid' => array(
+				'type' => 'serial',
+				'not null' => TRUE,
+				'description' => 'Primary key: unique id for employee'
+			),
+      'first_name' => array(
+        'type' => 'varchar',
+        'length' =>255,
+        'not null' => TRUE,
+        'default' =>'',
+        'description' => 'First Name'
+      ),
+      'email' => array(
+        'type' => 'varchar',
+        'length' =>255,
+        'not null' => TRUE,
+        'default' =>'',
+        'description' => 'Email'
+      ),
+      'role' => array(
+        'type' => 'varchar',
+        'length' =>255,
+        'not null' => TRUE,
+        'default' =>'',
+        'description' => 'Role'
+      ),
+      'pincode' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' =>0,
+        'description' => 'Pincode'
+      ),
+      'expiration' => array(
+        'type' => 'varchar',
+        'length' =>255,
+        'not null' => TRUE,
+        'default' =>'',
+        'description' => 'Expiration'
+      ),
+      'textarea' => array(
+        'type' => 'varchar',
+        'length' =>255,
+        'not null' => TRUE,
+        'default' =>'',
+        'description' => 'Text Area'
+      ),
+//      'tests_taken' => array(
+//        'type' => 'varchar',
+//        'length' =>255,
+//        'not null' => TRUE,
+//        'default' =>'',
+//        'description' => 'Tests Taken'
+//      ),
+      'phone' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' =>0,
+        'description' => 'Phone'
+      ),
+      'active' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' =>0,
+        'description' => 'Radio Button'
+      ),
+      'copy' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' =>0,
+        'description' => 'Checkbox'
+      ),
+		),
+    'primary key' =>array('pid'),
+	);
+	return $schema;
+}
