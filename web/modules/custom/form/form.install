@@ -1,83 +1,83 @@
 <?php
-use Drupal\Core\Database\Database;
 
+/**
+ * @file
+ * Install, update and uninstall functions for the dbtng_example module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
 function form_schema() {
-	$schema['employee'] = array(
-		'description' => 'Stores value in custom table',
-		'fields' => array(
-			'pid' => array(
-				'type' => 'serial',
-				'not null' => TRUE,
-				'description' => 'Primary key: unique id for employee'
-			),
-      'first_name' => array(
-        'type' => 'varchar',
-        'length' =>255,
+  $schema['employee'] = [
+    'description' => 'Stores value in custom table',
+    'fields' => [
+      'pid' => [
+        'type' => 'serial',
         'not null' => TRUE,
-        'default' =>'',
-        'description' => 'First Name'
-      ),
-      'email' => array(
+        'description' => 'Primary key: unique id for employee',
+      ],
+      'first_name' => [
         'type' => 'varchar',
-        'length' =>255,
+        'length' => 255,
         'not null' => TRUE,
-        'default' =>'',
-        'description' => 'Email'
-      ),
-      'role' => array(
+        'default' => '',
+        'description' => 'First Name',
+      ],
+      'email' => [
         'type' => 'varchar',
-        'length' =>255,
+        'length' => 255,
         'not null' => TRUE,
-        'default' =>'',
-        'description' => 'Role'
-      ),
-      'pincode' => array(
+        'default' => '',
+        'description' => 'Email',
+      ],
+      'role' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Role',
+      ],
+      'pincode' => [
         'type' => 'int',
         'not null' => TRUE,
-        'default' =>0,
-        'description' => 'Pincode'
-      ),
-      'expiration' => array(
+        'default' => 0,
+        'description' => 'Pincode',
+      ],
+      'expiration' => [
         'type' => 'varchar',
-        'length' =>255,
+        'length' => 255,
         'not null' => TRUE,
-        'default' =>'',
-        'description' => 'Expiration'
-      ),
-      'textarea' => array(
+        'default' => '',
+        'description' => 'Expiration',
+      ],
+      'textarea' => [
         'type' => 'varchar',
-        'length' =>255,
+        'length' => 255,
         'not null' => TRUE,
-        'default' =>'',
-        'description' => 'Text Area'
-      ),
-//      'tests_taken' => array(
-//        'type' => 'varchar',
-//        'length' =>255,
-//        'not null' => TRUE,
-//        'default' =>'',
-//        'description' => 'Tests Taken'
-//      ),
-      'phone' => array(
+        'default' => '',
+        'description' => 'Text Area',
+      ],
+      'phone' => [
         'type' => 'int',
         'not null' => TRUE,
-        'default' =>0,
-        'description' => 'Phone'
-      ),
-      'active' => array(
+        'default' => 0,
+        'description' => 'Phone',
+      ],
+      'active' => [
         'type' => 'int',
         'not null' => TRUE,
-        'default' =>0,
-        'description' => 'Radio Button'
-      ),
-      'copy' => array(
+        'default' => 0,
+        'description' => 'Radio Button',
+      ],
+      'copy' => [
         'type' => 'int',
         'not null' => TRUE,
-        'default' =>0,
-        'description' => 'Checkbox'
-      ),
-		),
-    'primary key' =>array('pid'),
-	);
-	return $schema;
+        'default' => 0,
+        'description' => 'Checkbox',
+      ],
+    ],
+    'primary key' => ['pid'],
+  ];
+  return $schema;
 }
