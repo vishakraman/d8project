@@ -40,12 +40,12 @@ class HelloForm extends FormBase {
       '#type' => 'textfield',
       '#title' => t('Pincode'),
       '#size' => 6,
-      '#pattern' => '[0-9]{6}',
       '#required' => TRUE,
     ];
     $form['employee_role'] = [
       '#type' => 'select',
       '#title' => ('Employee Role'),
+      '#required' => TRUE,
       '#options' => [
         'manager' => t('Manager'),
         'executive_manager' => t('Executive Manager'),
@@ -69,7 +69,6 @@ class HelloForm extends FormBase {
       '#type' => 'radios',
       '#title' => $this->t('Poll status'),
       '#options' => [0 => $this->t('Closed'), 1 => $this->t('Active')],
-      '#description' => $this->t('Radios, #type = radios'),
     ];
 
     $form['textarea'] = [
@@ -124,8 +123,8 @@ class HelloForm extends FormBase {
       $form_state->setErrorByName('email_address', $this->t('The Email Address you have provided is invalid.'));
     }
     // Phone number validation.
-    if (strlen($form_state->getValue('phone')) < 3) {
-      $form_state->setErrorByName('phone', $this->t('The phone number is too short. Please enter a full phone number.'));
+    if (!preg_match("/^[+]?[1-9][0-9]{9,14}$/", $form_state->getValue('phone'))) {
+      $form_state->setErrorByName('phone', $this->t('Please enter a valid phone number.'));
     }
     // First name validation.
     if (strlen($form_state->getValue('first_name')) < 5) {
@@ -136,6 +135,10 @@ class HelloForm extends FormBase {
     if (empty($form_state->getValue('copy'))) {
       // Set an error for the form element with a key of "accept".
       $form_state->setErrorByName('accept', $this->t('You must accept the terms of use to continue'));
+    }
+    // Pincode Validation
+    if (strlen($form_state->getValue('pincode')) < 6) {
+      $form_state->setErrorByName('pincode', $this->t('Pincode must be atleast 6 chars.'));
     }
   }
 
