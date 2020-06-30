@@ -109,7 +109,7 @@ class HelloForm extends FormBase {
         'copy' => $form_state->getValue('copy'),
       ]
     )->execute();
-    $url = Url::fromRoute('hello.thankyou');
+    $url = Url::fromRoute('hello.getdetails');
     $form_state->setRedirectUrl($url);
 
   }
