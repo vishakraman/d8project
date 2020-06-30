@@ -10,17 +10,6 @@ use Drupal\Core\Controller\ControllerBase;
 class ThankyouController extends ControllerBase {
 
   /**
-   * Returns a simple page.
-   */
-  public function successPage() {
-    // Display thank you page.
-    $element = [
-      '#markup' => 'Form data submitted',
-    ];
-    return $element;
-  }
-
-  /**
    * Fetch from the db and return.
    */
   public function getDetails() {

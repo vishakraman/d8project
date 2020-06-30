@@ -6,14 +6,6 @@ hello.form:
   requirements:
     _permission: 'access content'
 
-hello.thankyou:
-  path: '/hello/details/thankyou'
-  defaults:
-    _title: 'Thank you'
-    _controller: '\Drupal\form\Controller\ThankyouController::successPage'
-  requirements:
-    _permission: 'access content'
-
 hello.getdetails:
   path: '/hello/getdetails'
   defaults:
