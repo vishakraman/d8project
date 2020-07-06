@@ -1,0 +1,6 @@
+form.settings_form:
+  title: 'Email Aknowledge Text'
+  route_name: form.settings_form
+  description: 'Form for email aknowledgement'
+  parent: system.admin_config_system
+  weight: 99

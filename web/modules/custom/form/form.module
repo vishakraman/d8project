@@ -65,13 +65,14 @@ use Drupal\Component\Utility\Html;
             See ya!";
         $message['body'][] =  Drupal\Core\Mail\MailFormatHelper::htmlToText($body);
         break;
+
       case 'ak_mail' :
+     
         $from = \Drupal::config('system.site')->get('mail');
         $message['subject'] = t('E-mail sent from @site-name', ['@site-name' => $from], $options);
         $message['to'] = $params['email_address'];
-        $body2 =
-          "Hi,
-            Thanks, our technical team will get back to you shorty";
+         //Our Custom Config Form Body Content
+        $body2 = \Drupal::config('myform.settings')->get('body');
         $message['body'][] =  Drupal\Core\Mail\MailFormatHelper::htmlToText($body2);
 
     }

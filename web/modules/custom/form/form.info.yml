@@ -5,3 +5,4 @@ package: Custom
 type: module
 dependencies:
   - block
+configure: form.admin_settings

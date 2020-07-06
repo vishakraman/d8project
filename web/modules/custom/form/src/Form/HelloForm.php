@@ -157,7 +157,7 @@ class HelloForm extends FormBase {
     $key = 'custom_mail';
 
     // Specify 'to' and 'from' addresses.
-    $to = 'vishakraman66@gmail.com';
+    $to = $this->config('system.site')->get('mail');
     $from = $this->config('system.site')->get('mail');
 
     // "params" loads in additional context for email content completion in

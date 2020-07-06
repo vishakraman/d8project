@@ -13,3 +13,11 @@ hello.getdetails:
     _controller: '\Drupal\form\Controller\ThankyouController::getDetails'
   requirements:
     _permission: 'access content'
+
+form.settings_form:
+  path: '/admin/config/myform'
+  defaults:
+    _form: '\Drupal\form\Form\ModuleConfigurationForm'
+    _title: 'Email Body Content'
+  requirements:
+    _permission: 'administer site configuration'
