@@ -59,10 +59,11 @@ function form_schema() {
         'description' => 'Text Area',
       ],
       'phone' => [
-        'type' => 'int',
+        'type' => 'varchar',
+        'length' => 255,
         'not null' => TRUE,
-        'default' => 0,
-        'description' => 'Phone',
+        'default' => '',
+        'description' => 'Store phone of a person',
       ],
       'active' => [
         'type' => 'int',
