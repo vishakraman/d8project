@@ -37,7 +37,8 @@ use Drupal\Component\Utility\Html;
     ];
     switch ($key) {
       // Send a simple message from the contact form.
-      case 'custom_mail':
+      case 'admin_mail':
+      //This template is used for admin mail.
         $from = \Drupal::config('system.site')->get('mail');
         $message['to'] = \Drupal::config('system.site')->get('mail');
         $message['subject'] = t('E-mail sent from @site-name', ['@site-name' => $from], $options);
@@ -66,8 +67,8 @@ use Drupal\Component\Utility\Html;
         $message['body'][] =  Drupal\Core\Mail\MailFormatHelper::htmlToText($body);
         break;
 
-      case 'ak_mail' :
-     
+      case 'end_user_mail' :
+        //This template is used for end user mail.
         $from = \Drupal::config('system.site')->get('mail');
         $message['subject'] = t('E-mail sent from @site-name', ['@site-name' => $from], $options);
         $message['to'] = $params['email_address'];
