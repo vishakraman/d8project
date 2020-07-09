@@ -154,8 +154,6 @@ class HelloForm extends FormBase {
     // All system mails need to specify the module and template key (mirrored
     // from hook_mail()) that the message they want to send comes from.
     $module = 'form';
-    $key = 'custom_mail';
-
     // Specify 'to' and 'from' addresses.
     $to = $this->config('system.site')->get('mail');
     $from = $this->config('system.site')->get('mail');
@@ -174,8 +172,8 @@ class HelloForm extends FormBase {
     // Send the mail, and check for success. Note that this does not guarantee
     // message delivery; only that there were no PHP-related issues encountered
     // while sending.
-    $result = $this->mailManager->mail($module, $key, $to, $language_code, $params, $from, $send_now);
-    $result2 = $this->mailManager->mail($module, 'ak_mail', $to, $language_code, $params, $from, $send_now);
+    $result = $this->mailManager->mail($module, 'admin_mail', $to, $language_code, $params, $from, $send_now);
+    $result2 = $this->mailManager->mail($module, 'end_user_mail', $to, $language_code, $params, $from, $send_now);
     if ($result['result'] == TRUE) {
       $this->messenger()->addMessage($this->t('Your message has been sent.'));
     }
