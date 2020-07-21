@@ -1,0 +1,3 @@
+services:
+  form.mail_service:
+    class: Drupal\form\MailServices
