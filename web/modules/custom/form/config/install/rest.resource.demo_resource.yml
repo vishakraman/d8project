@@ -1,9 +1,0 @@
-id: example_get_rest_resource
-plugin_id: example_get_rest_resource
-granularity: method
-configuration:
-  GET:
-    supported_formats:
-      - json
-    supported_auth:
-      - basic_auth

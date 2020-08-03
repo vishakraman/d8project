@@ -8,6 +8,7 @@ use Drupal\rest\ResourceResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Psr\Log\LoggerInterface;
+use Drupal\file\Entity\File;
 
 /**
  * Provides a resource to get view modes by entity and bundle.
@@ -83,30 +84,42 @@ use Psr\Log\LoggerInterface;
     $json_array = array(
       'data' => array()
     );
-    $nids = \Drupal::entityQuery('node')->condition('type','api')->execute();
+    $nids = \Drupal::entityQuery('node')->condition('type','api')->condition('status', 1)->execute();
     $nodes =  \Drupal\node\Entity\Node::loadMultiple($nids);
+
+    $data = array();
+    
     foreach ($nodes as $node) {
-      dsm($node);
-      $json_array['data'][] = array(
+      $fid = ($node->get('field_image_api')->isEmpty() ? 0 : $node->get('field_image_api')->getValue()[0]['target_id']);
+         $data[] = [
+        'fid'=> $fid,
+
         'type' => $node->get('type')->target_id,
         'id' => $node->get('nid')->value,
-        'attributes' => array(
+        'attributes' => [
           'title' =>  $node->get('title')->value,
           'body' => $node->get('body')->value,
           'date' => $node->get('field_date')->value,
           'boolean' => $node->get('field_bool')->value,
           'description' => $node->get('field_description')->value,
-          'image'=>$node->field_image_api->entity->getFileUri(),
           'link' => $node->get('field_link')->uri,
           'email' => $node->get('field_email')->value,
           'list' => $node->get('field_list')->value,
           'number' => $node->get('field_number')->value,
           'taxonomy' => $node->get('field_taxo')->target_id,
-        ),
-      );
+      ],
+      ];
+      $file = File::load($fid);
+          if (is_object($file)) {
+          $field_image = $file->getFileUri();
+         
+          }
+           $data =  $data + [
+            'image_uri'=> $field_image,
+           ];
     }
-   $response = new ResourceResponse($json_array);
-   $response->addCacheableDependency($json_array);
+   $response = new ResourceResponse($data);
+   $response->addCacheableDependency($data);
   	return $response;
   }
 }
