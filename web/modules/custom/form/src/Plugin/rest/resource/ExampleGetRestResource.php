@@ -17,7 +17,7 @@ use Drupal\file\Entity\File;
  *   id = "example_get_rest_resource",
  *   label = @Translation("Example get rest resource"),
  *   uri_paths = {
- *     "canonical" = "/example-rest"
+ *     "canonical" = "/example-rest/{date}"
  *   }
  * )
  */
@@ -80,20 +80,22 @@ use Drupal\file\Entity\File;
    * @throws \Symfony\Component\HttpKernel\Exception\HttpException
    *   Throws exception expected.
    */
- public function get() {
+ public function get($pub = NULL) {
     $json_array = array(
       'data' => array()
     );
-    $nids = \Drupal::entityQuery('node')->condition('type','api')->condition('status', 1)->execute();
+    if ($date) {
+    	
+    $nids = \Drupal::entityQuery('node')->condition('type','api')->condition('created', $date, '<=')->execute();
     $nodes =  \Drupal\node\Entity\Node::loadMultiple($nids);
 
     $data = array();
     
     foreach ($nodes as $node) {
+  
       $fid = ($node->get('field_image_api')->isEmpty() ? 0 : $node->get('field_image_api')->getValue()[0]['target_id']);
          $data[] = [
         'fid'=> $fid,
-
         'type' => $node->get('type')->target_id,
         'id' => $node->get('nid')->value,
         'attributes' => [
@@ -107,6 +109,7 @@ use Drupal\file\Entity\File;
           'list' => $node->get('field_list')->value,
           'number' => $node->get('field_number')->value,
           'taxonomy' => $node->get('field_taxo')->target_id,
+          'changes' => $node->getChangedTime(),
       ],
       ];
       $file = File::load($fid);
@@ -118,6 +121,19 @@ use Drupal\file\Entity\File;
             'image_uri'=> $field_image,
            ];
     }
+    }
+      
+      // $nids = \Drupal::entityQuery('node')->condition('type','api')->execute();
+      // if($nids){
+      // 	$date = $nids->getChangedTime();
+      // 	dsm($date);
+      //   $nodes =  \Drupal\node\Entity\Node::loadMultiple($nids);
+      //   foreach ($nodes as $key => $value) {
+      //     $data[] = ['id' => $value->id(),'title' => $value->getTitle()];
+      //   }
+      // }
+ 
+
    $response = new ResourceResponse($data);
    $response->addCacheableDependency($data);
   	return $response;
