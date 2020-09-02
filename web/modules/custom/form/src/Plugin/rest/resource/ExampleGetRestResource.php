@@ -9,6 +9,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Psr\Log\LoggerInterface;
 use Drupal\file\Entity\File;
+use Drupal\node\Entity\Node;
+use Drupal\Core\Datetime\DrupalDateTime;
 
 /**
  * Provides a resource to get view modes by entity and bundle.
@@ -17,7 +19,7 @@ use Drupal\file\Entity\File;
  *   id = "example_get_rest_resource",
  *   label = @Translation("Example get rest resource"),
  *   uri_paths = {
- *     "canonical" = "/example-rest"
+ *     "canonical" = "/example-rest/{date}"
  *   }
  * )
  */
@@ -80,20 +82,56 @@ use Drupal\file\Entity\File;
    * @throws \Symfony\Component\HttpKernel\Exception\HttpException
    *   Throws exception expected.
    */
- public function get() {
-    $json_array = array(
-      'data' => array()
-    );
-    $nids = \Drupal::entityQuery('node')->condition('type','api')->condition('status', 1)->execute();
-    $nodes =  \Drupal\node\Entity\Node::loadMultiple($nids);
+ public function get($date = '') {
 
-    $data = array();
-    
+  $time=explode("=",$date);
+
+     if (!empty($time[1] && is_numeric($time[1]))) {
+   
+    $human_date = date( 'm-d-Y', $time[1] );
+    $data_split= explode("-", $human_date);
+    $month= $data_split[0];
+    $day= $data_split[1];
+    $year = $data_split[2];
+
+      //  Query to fetch the nids
+      // validate the  timestamp is proper
+      if(checkdate($month,$day, $year)){
+       
+      $query = \Drupal::database()->select('node_field_data', 'nf');
+      $query->fields('nf', ['nid']);
+      $query->condition('nf.type', 'api');
+      $query->condition('nf.created', $time[1], '>=');
+      $nids = $query->execute()->fetchAll();
+      $node_nid = [];
+      foreach($nids as $key => $nid) {
+       $node_nid[$nid->nid] = $nid->nid;
+       }
+       $node_data=$node_nid;
+     
+
+      }
+      else {
+        $data = "date format is wrong";  
+        $response = new ResourceResponse($data);
+    $response->addCacheableDependency($data);
+    return $response;
+      }
+ 
+      }
+      else {
+ 
+          $nids = \Drupal::entityQuery('node')->condition('status', 1)->condition('type', 'api')->execute();
+          $node_data=$nids;
+      }
+
+      $nodes = Node::loadMultiple($node_data);
+      $data = [];
     foreach ($nodes as $node) {
+  
       $fid = ($node->get('field_image_api')->isEmpty() ? 0 : $node->get('field_image_api')->getValue()[0]['target_id']);
          $data[] = [
         'fid'=> $fid,
-
         'type' => $node->get('type')->target_id,
         'id' => $node->get('nid')->value,
         'attributes' => [
@@ -107,6 +145,7 @@ use Drupal\file\Entity\File;
           'list' => $node->get('field_list')->value,
           'number' => $node->get('field_number')->value,
           'taxonomy' => $node->get('field_taxo')->target_id,
+          'changes' => $node->getChangedTime(),
       ],
       ];
       $file = File::load($fid);
@@ -118,8 +157,29 @@ use Drupal\file\Entity\File;
             'image_uri'=> $field_image,
            ];
     }
-   $response = new ResourceResponse($data);
-   $response->addCacheableDependency($data);
-  	return $response;
+   
+    $response = new ResourceResponse($data);
+    $response->addCacheableDependency($data);
+    return $response;
   }
+    /**
+   * Implements helper function.
+   */
+  public function restImageUri($fid) {
+    $file = File::load($fid);
+    if (is_object($file)) {
+      $file_uri = $file->getFileUri();
+      return $file_uri;
+    }
+
+  }
+      public function changeDateFormat($date_string, $format_string = 'j-F-Y H:i:s')
+        {
+        print_r($date_string);
+        if (!$this->isTimestamp($date_string)) {
+        $date_string = strtotime($date_string);
+        }
+
+      return date($format_string, $date_string);
+      }
 }
